@@ -1,0 +1,22 @@
+.card {
+    box-shadow: 1px 2px 5px grey;
+}
+
+.card:hover {
+    box-shadow: 1px 2px 5px #AAC4FF;
+}
+
+.list-pagination {
+    cursor: pointer;
+    text-decoration: underline;
+    list-style-type: none;
+    padding: 0px 5px;
+}
+
+.list-pagination:hover {
+    background-color: grey;
+    color: white;
+    padding: 0px 5px;
+    border-radius: 5px;
+    margin: 0;
+}
