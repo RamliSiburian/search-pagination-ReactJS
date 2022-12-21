@@ -28,13 +28,13 @@ function Home() {
                 </Form>
 
             </div>
-            <div className="article d-flex gap-5 flex-wrap justify-content-center justify-content-md-start">
+            <div className="article mb-5 d-flex gap-5 flex-wrap justify-content-center justify-content-md-between">
                 {getAllData?.filter((item) => {
                     return search.toLowerCase() === ''
                         ? item
                         : item.title.toLowerCase().includes(search);
                 }).map((item, index) => (
-                    <Card style={{ width: '16rem' }} key="index" className='card'>
+                    <Card style={{ width: '15rem' }} key="index" className='card'>
                         <Card.Img variant="top" src={item?.image} />
                         <Card.Body>
                             <Card.Title>{item?.title}</Card.Title>
