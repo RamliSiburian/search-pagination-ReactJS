@@ -9,33 +9,46 @@ import { Link } from 'react-router-dom';
 function Admin() {
     const [state, dispatch] = useContext(UserContext)
     const [search, setSearch] = useState('');
-    // const user_id = state.user.id
+    const user_id = state.user.id
     // console.log("ini user id", user_id);
 
-    // let { data: getDataById } = useQuery('getDataByIdCache', async () => {
-    //     const response = await API.get("/articlesByuser/1")
-    //     return response.data.data
-    // })
-    // console.log("ini data id", getDataById);
-    let { data: getAllData } = useQuery('getAllDatasCache', async () => {
-        const response = await API.get("/articles")
-        return response.data.data
+    let { data: getDataByUserId } = useQuery('getDataByUserIdCache', async () => {
+        const response = await API.get("/articlesByuser/" + user_id)
+        return response.data
     })
-    console.log(getAllData);
+
+    //search
+    const [inputText, setInputText] = useState("");
+    let inputHandler = (e) => {
+        var lowerCase = e.target.value.toLowerCase();
+        setInputText(lowerCase);
+    };
+
+    const filteredData = getDataByUserId?.filter((el) => {
+        if (inputText === '') {
+            return el;
+        }
+        else {
+            return el?.title.toLowerCase().includes(inputText)
+        }
+    })
+
+    //pagination
 
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(2);
 
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = getAllData?.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = filteredData?.slice(indexOfFirstPost, indexOfLastPost);
     const pageNumbers = [];
-    const totalPosts = getAllData?.length;
+    const totalPosts = getDataByUserId?.length;
 
     for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
         pageNumbers.push(i);
     }
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
         <Container>
             <p className="fs-1 fw-bold mt-5 mb-0">List Data</p>
@@ -46,7 +59,7 @@ function Admin() {
                     <Form.Control
                         type='text'
                         placeholder='search...'
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={inputHandler}
                     />
                 </Form>
                 <Link to="/Add-article" className='btn btn-primary'><Icon.FaPlus /> Tambah Data</Link>
@@ -61,11 +74,7 @@ function Admin() {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentPosts?.filter((item) => {
-                        return search.toLowerCase() === ''
-                            ? item
-                            : item.title.toLowerCase().includes(search);
-                    }).map((item, index) => (
+                    {currentPosts?.map((item, index) => (
                         <tr key={index}>
                             <td>{index + 1}</td>
                             <td className="align-middle">
@@ -89,8 +98,8 @@ function Admin() {
 
 
             <div className="d-flex justify-content-center mt-4">
-                <ul className="text-dark d-flex gap-3">
-                    <li onClick={() => setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))} className="list-pagination">
+                <ul className="text-dark d-flex gap-1">
+                    <li onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)} className="list-pagination">
                         prev
                     </li>
                     {pageNumbers?.map((number) => (
@@ -98,7 +107,7 @@ function Admin() {
                             {number}
                         </li>
                     ))}
-                    <li onClick={() => { setCurrentPage((prev) => prev < pageNumbers.length ? prev + 1 : prev) }} className="list-pagination">
+                    <li onClick={() => currentPage < pageNumbers.length && setCurrentPage(currentPage + 1)} className="list-pagination">
                         next
                     </li>
                 </ul>
