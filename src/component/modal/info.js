@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table } from 'react-bootstrap';
+import { Modal, Table } from 'react-bootstrap';
 
 function InfoLogin({ show, setShow }) {
     const handleClose = () => setShow(false)
