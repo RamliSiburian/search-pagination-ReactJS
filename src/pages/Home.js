@@ -39,7 +39,7 @@ function Home() {
                         <Card.Body>
                             <Card.Title>{item?.title}</Card.Title>
                             <Card.Text>
-                                {item?.body}
+                                {item?.body.slice(0, 50)}
                             </Card.Text>
                             {/* <Button variant="primary">Go somewhere</Button> */}
                         </Card.Body>

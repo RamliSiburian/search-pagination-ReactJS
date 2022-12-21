@@ -10,7 +10,6 @@ function Navbars() {
     const [showLogin, setShowLogin] = useState(false);
     const [state, dispatch] = useContext(UserContext)
     const navigate = useNavigate()
-    console.log(state.isLogin);
 
     function Logout() {
         dispatch({

@@ -9,10 +9,10 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./context/User-context";
 import { API, setAuthToken } from "./config/api/Api";
 
-
 function App() {
   const [state, dispatch] = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const checkUser = async () => {
