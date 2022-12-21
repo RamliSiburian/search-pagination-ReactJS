@@ -21,7 +21,7 @@ function InfoLogin({ show, setShow }) {
                             <td>admin123</td>
                         </tr>
                         <tr>
-                            <td>Admin</td>
+                            <td>Admin1</td>
                             <td>admin123</td>
                         </tr>
                     </Table>

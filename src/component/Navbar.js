@@ -38,7 +38,7 @@ function Navbars() {
                             </Nav>
                         ) : (
                             <Nav className="me-end gap-3">
-                                <span onClick={() => setShowInfo(true)}><Icon.FaInfoCircle /></span>
+                                <span onClick={() => setShowInfo(true)}>info user<Icon.FaInfoCircle className='me-4' style={{ width: "35px" }} /></span>
                                 <Button className='last fw-bold' onClick={() => setShowLogin(true)}>Sign In</Button>
                             </Nav>
                         )}
