@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, Button, Container, Form } from 'react-bootstrap';
+import { Alert, Button, Container, Form, Spinner } from 'react-bootstrap';
 import * as Icon from 'react-icons/fa'
 import { useMutation } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ function AddArticle() {
     const [preview, setPreview] = useState(null)
     const navigate = useNavigate()
     const [message, setMessage] = useState(null)
+    const [isloading, setIsloading] = useState(false)
     const [form, setForm] = useState({
         image: "",
         title: "",
@@ -32,6 +33,7 @@ function AddArticle() {
     const handleOnSubmit = useMutation(async (e) => {
         try {
             e.preventDefault();
+            setIsloading(true)
 
             const formData = new FormData();
             formData.set("image", form.image[0], form.image[0].name);
@@ -43,6 +45,7 @@ function AddArticle() {
                 },
             });
             if (data.data.code === 200) {
+                setIsloading(false)
                 const alert = (
                     <Alert variant="success" className="py-1 fw-bold">
                         Article berhasil di upload
@@ -136,7 +139,14 @@ function AddArticle() {
                                 autocomplete='off'
                             />
                         </Form.Group>
-                        <Button name='Simpan' type='submit'> Simpan</Button>
+                        <Button name='Simpan' type='submit'> {isloading ? (
+                            <div className='d-flex align-items-center'>
+                                <Spinner size='sm' animation="border" variant="success" /> &nbsp;&nbsp;
+                                <span> Loading</span>
+                            </div>
+                        ) : (
+                            <span>Simpan</span>
+                        )}</Button>
                     </Form>
                 </div>
             </Container>
