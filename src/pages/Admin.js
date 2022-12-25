@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query';
 import { API } from '../config/api/Api';
 import { Button, Container, Form, Table } from 'react-bootstrap';
@@ -8,41 +8,42 @@ import { Link } from 'react-router-dom';
 
 function Admin() {
     const [state, dispatch] = useContext(UserContext)
-    const [search, setSearch] = useState('');
     const user_id = state.user.id
-    // console.log("ini user id", user_id);
+    const [fetchData, setFetchData] = useState()
 
     let { data: getDataByUserId } = useQuery('getDataByUserIdCache', async () => {
         const response = await API.get("/articlesByuser/" + user_id)
         return response.data
     })
 
-    //search
-    const [inputText, setInputText] = useState("");
-    let inputHandler = (e) => {
-        var lowerCase = e.target.value.toLowerCase();
-        setInputText(lowerCase);
-    };
+    const searchMovie = async (q) => {
+        const response = await API.get("articlesearch/" + q)
+        return response.data
+    }
 
-    const filteredData = getDataByUserId?.filter((el) => {
-        if (inputText === '') {
-            return el;
+    const search = async (q) => {
+        if (q.length > 0) {
+            const query = await searchMovie(q)
+            setFetchData(query)
+        } else {
+            setFetchData(getDataByUserId)
         }
-        else {
-            return el?.title.toLowerCase().includes(inputText)
-        }
-    })
+    }
+
+    useEffect(() => {
+        setFetchData(getDataByUserId)
+    }, [getDataByUserId])
 
     //pagination
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(2);
+    const [postsPerPage] = useState(3);
 
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = filteredData?.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = fetchData?.slice(indexOfFirstPost, indexOfLastPost);
     const pageNumbers = [];
-    const totalPosts = getDataByUserId?.length;
+    const totalPosts = fetchData?.length;
 
     for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
         pageNumbers.push(i);
@@ -59,12 +60,15 @@ function Admin() {
                     <Form.Control
                         type='text'
                         placeholder='search...'
-                        onChange={inputHandler}
+                        onChange={({ target }) => search(target.value)}
                     />
                 </Form>
                 <Link to="/Add-article" className='btn btn-primary'><Icon.FaPlus /> Tambah Data</Link>
             </div>
-            <Table striped bordered hover variant='primary' size='lg' className='mt-4' >
+            <div className="mt-4 mb-2">
+                <u>Total data : {fetchData?.length} from {pageNumbers.length} Pages</u>
+            </div>
+            <Table striped bordered hover variant='primary' size='lg' >
                 <thead>
                     <tr>
                         <th>No</th>
@@ -95,24 +99,30 @@ function Admin() {
                     ))}
                 </tbody>
             </Table>
-
-
-            <div className="d-flex justify-content-center mt-4">
+            <div className="d-flex justify-content-center mt-4 mb-5">
                 <ul className="text-dark d-flex gap-1">
-                    <li onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)} className="list-pagination">
-                        prev
-                    </li>
-                    {pageNumbers?.map((number) => (
+                    {/* {currentPage <= 1 ? (
+                        <></>
+                    ) : (
+                        <li onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)} className="list-pagination">
+                            prev
+                        </li>
+                    )} */}
+                    {pageNumbers.slice(0, 5)?.map((number) => (
                         <li key={number} onClick={() => paginate(number)} className="list-pagination">
                             {number}
                         </li>
                     ))}
-                    <li onClick={() => currentPage < pageNumbers.length && setCurrentPage(currentPage + 1)} className="list-pagination">
-                        next
-                    </li>
+                    {/* {currentPage >= pageNumbers.length ? (
+                        <></>
+                    ) : (
+                        <li onClick={() => currentPage < pageNumbers.length && setCurrentPage(currentPage + 1)} className="list-pagination">
+                            next
+                        </li>
+                    )} */}
                 </ul>
             </div>
-        </Container>
+        </Container >
     )
 }
 

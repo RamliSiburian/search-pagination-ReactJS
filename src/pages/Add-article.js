@@ -52,6 +52,7 @@ function AddArticle() {
                     </Alert>
                 )
                 setMessage(alert);
+                
                 setPreview(null)
                 setForm({
                     image: "",

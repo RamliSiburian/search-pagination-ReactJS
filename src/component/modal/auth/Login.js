@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react'
-import { Alert, Button, Form, FormControl, Modal } from 'react-bootstrap';
+import { Alert, Button, Form, FormControl, Modal, Spinner } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../../../config/api/Api';
 import { UserContext } from '../../../context/User-context';
 
 function Login({ show, setShow }) {
+    const [isloading, setIsLoading] = useState(false)
     const handleClose = () => setShow(false)
     const navigate = useNavigate()
     const [state, dispatch] = useContext(UserContext)
@@ -25,6 +26,8 @@ function Login({ show, setShow }) {
         try {
             e.preventDefault()
 
+            setIsLoading(true)
+
             const dataLogin = await API.post("/Login", formLogin)
             const user = dataLogin.data.data
 
@@ -39,10 +42,12 @@ function Login({ show, setShow }) {
                 </Alert>
             )
             setMessage(alert)
+            setIsLoading(false)
             navigate("/Admin")
             setShow(false)
-            navigate("/Admin")
+            // navigate("/Admin")
         } catch (error) {
+            setIsLoading(false)
             const alert = (
                 <Alert variant='danger' className='py-1' >
                     Username atau password salah
@@ -83,7 +88,14 @@ function Login({ show, setShow }) {
                                 required='required'
                             />
                         </Form.Group>
-                        <Button type='submit' className='btn text-white fw-bold link w-100 border-0 bg-primary' >Login</Button>
+                        {isloading ? (
+                            <div className='text-center bg-primary bg-opacity-75 rounded p-2 text-white'>
+                                <Spinner size='sm' animation="border" /> &nbsp;
+                                Loading...
+                            </div>
+                        ) : (
+                            <Button type='submit' className='btn text-white fw-bold link w-100 border-0 bg-primary' >Login</Button>
+                        )}
                     </Form>
                 </Modal.Body>
             </Modal>

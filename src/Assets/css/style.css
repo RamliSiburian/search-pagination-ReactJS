@@ -8,15 +8,16 @@
 
 .list-pagination {
     cursor: pointer;
-    text-decoration: underline;
+    width: 25px;
+    margin-right: 10px;
+    font-weight: bold;
+    text-align: center;
     list-style-type: none;
-    padding: 0px 5px;
+    border-radius: 50%;
+    background-color: #AAC4FF;
 }
 
 .list-pagination:hover {
     background-color: grey;
     color: white;
-    padding: 0px 5px;
-    border-radius: 5px;
-    margin: 0;
 }

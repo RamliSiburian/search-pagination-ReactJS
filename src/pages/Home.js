@@ -28,7 +28,7 @@ function Home() {
                 </Form>
 
             </div>
-            <div className="article mb-5 d-flex gap-5 flex-wrap justify-content-center justify-content-md-between">
+            <div className="article mb-5 d-flex gap-5 flex-wrap justify-content-center justify-content-md-start">
                 {getAllData?.filter((item) => {
                     return search.toLowerCase() === ''
                         ? item
