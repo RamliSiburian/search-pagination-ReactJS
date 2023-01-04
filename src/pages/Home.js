@@ -30,9 +30,9 @@ function Home() {
             </div>
             <div className="article mb-5 d-flex gap-5 flex-wrap justify-content-center justify-content-md-start">
                 {getAllData?.filter((item) => {
-                    return search.toLowerCase() === ''
+                    return search === ''
                         ? item
-                        : item.title.toLowerCase().includes(search);
+                        : item.title.toLowerCase().includes(search.toLocaleLowerCase());
                 }).map((item, index) => (
                     <Card style={{ width: '15rem' }} key="index" className='card' data-aos="fade-up" data-aos-duration="1500">
                         <Card.Img variant="top" src={item?.image} />

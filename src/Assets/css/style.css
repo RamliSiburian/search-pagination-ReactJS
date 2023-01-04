@@ -21,3 +21,7 @@
     background-color: grey;
     color: white;
 }
+
+.loading {
+    height: 60vh;
+}
