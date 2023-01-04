@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Card, Container, Form } from 'react-bootstrap';
+import { Card, Container, Form } from 'react-bootstrap';
 import { useQuery } from 'react-query';
 
 import '../Assets/css/style.css'
@@ -34,7 +34,7 @@ function Home() {
                         ? item
                         : item.title.toLowerCase().includes(search);
                 }).map((item, index) => (
-                    <Card style={{ width: '15rem' }} key="index" className='card'>
+                    <Card style={{ width: '15rem' }} key="index" className='card' data-aos="fade-up" data-aos-duration="1500">
                         <Card.Img variant="top" src={item?.image} />
                         <Card.Body>
                             <Card.Title>{item?.title}</Card.Title>
